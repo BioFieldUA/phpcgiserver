@@ -1,0 +1,6 @@
+.vs
+node_modules
+obj
+public
+package-lock.json
+nuget.config
