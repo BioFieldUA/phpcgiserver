@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Browser (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://localhost",
+      "webRoot": "${workspaceFolder}\\public\\public_html"
+    },
+    {
+      "name": "Launch Server",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/server",
+      "stopOnEntry": true,
+      "console": "externalTerminal",
+      "env": {
+        "port": "443"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Launch Server and Browser",
+      "configurations": [
+        "Launch Server",
+        "Browser (Chrome)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "phpcgiserver",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "PHP FastCGI Server on Node.JS",
+  "author": {
+    "name": "Alex M."
+  },
+  "scripts": {
+    "start": "node server"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "fastcgi-client": "^0.2.0",
+    "https": "^1.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "eslint": "^9.16.0"
+  }
+}
