@@ -1,4 +1,10 @@
 ﻿<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.1738743">
+  <ItemGroup>
+    <None Remove="node.js.yml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".github\workflows\node.js.yml" />
+  </ItemGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Release|AnyCPU">
       <Configuration>Release</Configuration>
