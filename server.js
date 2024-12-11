@@ -6,12 +6,12 @@ const options = {
     fastCgiPort: '9000',
     rootDir: 'public/public_html',
     certKey: 'asp_net_key.pem',
-    certBody: 'asp_net_cert.pem',
+    certBody: 'asp_net_cert.pem'
 };
 
 const logger = {
     log: (message) => console.log(`INFO: ${message}`),
-    error: (message) => console.error(`ERROR: ${message}`),
+    error: (message) => console.error(`ERROR: ${message}`)
 };
 
 const phpServer = new PHPServer(options, logger);
