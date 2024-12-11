@@ -7,5 +7,3 @@ nuget.config
 phpcgiserver.sln
 phpcgiserver.esproj
 phpcgiserver.esproj.user
-/.vscode/launch.json
-/phpcgiserver.sln
