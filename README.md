@@ -15,11 +15,14 @@
 *   **Efficient FastCGI Handling:**  Efficiently handles communication with the PHP FastCGI process.
 
 ## Installation
+```bash
 npm install phpcgiserver
+```
 
 ## Usage
 Here's a basic example of how to use phpcgiserver to create and start a PHP FastCGI server:
 
+```js
 import PHPServer from 'phpcgiserver';
 
 const options = {
@@ -42,29 +45,30 @@ phpServer.start().catch(e => {
     // Keep the process alive to prevent immediate exit on error:
     setInterval(() => { }, 1000);
 });
-
+```
 You can easily replace the default logger with your own implementation. This allows you to integrate with your preferred logging system.
 
-
 ## API Documentation
-PHPServer Class
-constructor(options, logger?)
-Creates a new instance of the PHPServer.
+`PHPServer` Class
 
-options (Object): An object containing the server configuration options.
-isSingleIndexApp (boolean): Indicates if the application is a single index application (default: true). Set it to TRUE if you want to redirect all of requests to `index.php` at the root directory.
-serverPort (number|string): The port number for the HTTPS server (default: 443).
-fastCgiPort (number|string): The port number for the PHP FastCGI server (default: 9000).
-rootDir (string): The root directory where your PHP files are located.
-certKey (string): The path to your SSL private key file.
-certBody (string): The path to your SSL certificate file.
-logger (Object, optional): An object with log and error methods for logging. Defaults to `console` if not provided.
+`constructor(options, logger?)` Creates a new instance of the PHPServer.
+
+* `options` (Object): An object containing the server configuration options.
+    * `isSingleIndexApp` (boolean): Indicates if the application is a single index application (default: true). Set it to TRUE if you want to redirect all of requests to `index.php` at the root directory.
+    * `serverPort` (number|string): The port number for the HTTPS server (default: 443).
+    * `fastCgiPort` (number|string): The port number for the PHP FastCGI server (default: 9000).
+    * `rootDir` (string): The root directory where your PHP files are located.
+    * `certKey` (string): The path to your SSL private key file.
+    * `certBody` (string): The path to your SSL certificate file.
+* `logger` (Object, optional): An object with `log` and `error` methods for logging. Defaults to `console` if not provided.
 
 The logger object should implement the following interface:
+```js
 interface Logger {
   log(message: string): void;
   error(message: string): void;
 }
+```
 
 ### Error Handling
 The PHPServer class handles common errors such as port conflicts and permission issues. If an unrecoverable error occurs, the process will exit with a non-zero code.
