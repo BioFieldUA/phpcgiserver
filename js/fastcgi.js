@@ -7,38 +7,43 @@ let _clientCgi;
 /**
  * Initializes the FastCGI server by spawning a php-cgi process and establishing a connection.
  *
+ * @typedef {Object} Logger
+ * @property {function(string): void} log - Logs an informational message.
+ * @property {function(string): void} error - Logs an error message.
+ * 
  * @param {number} port - The port on which the FastCGI server will be started.
+ * @param {Logger} logger - The logger to use for logging messages.
  * @returns {Promise<ChildProcess>} A Promise that resolves with the child process object
  *                                  of php-cgi after successful connection of the FastCGI client.
  *                                  The Promise rejects if an error occurs while starting or 
  *                                  the server is killed before the client initialization.
  * @throws {Error} If an error occurs while starting or connecting to the FastCGI server.
  */
-export function initFastCGI(port) {
+export function initFastCGI(port, logger = console) {
     return new Promise((resolve, reject) => {
         let _cgi_init = false;
         const serverCgi = spawn('php-cgi', ['-b', `127.0.0.1:${port}`]);
         serverCgi.on('spawn', () => {
-            console.log('FastCGI Server creating...');
+            logger.log('FastCGI Server creating...');
             _clientCgi = fastcgiConnector({
                 host: '127.0.0.1',
                 port: port,
                 maxConns: 100
             });
             _clientCgi.on('ready', () => {
-                console.log('FastCGI Server is ready');
+                logger.log('FastCGI Server is ready');
                 _cgi_init = true;
                 resolve(serverCgi);
             });
             _clientCgi.on('error', (error) => {
                 if (_cgi_init) {
-                    console.error(`FastCGI Client ${error}`);
+                    logger.error(`FastCGI Client ${error}`);
                 }
             });
         });
         serverCgi.on('close', () => {
             if (_cgi_init) {
-                console.log('FastCGI Server closed!');
+                logger.log('FastCGI Server closed!');
             } else {
                 serverCgi.kill();
                 reject(new Error('FastCGI Server was killed before initialization!'));
@@ -46,7 +51,7 @@ export function initFastCGI(port) {
         });
         serverCgi.on('error', (error) => {
             if (_cgi_init) {
-                console.error(`FastCGI Server ${error}`);
+                logger.error(`FastCGI Server ${error}`);
             } else {
                 serverCgi.kill();
                 reject(error);
@@ -87,7 +92,7 @@ export function requestFastCGI(fileName, rootDir, req, res, next) {
         SERVER_ADDR: req.socket.localAddress,
         SERVER_PROTOCOL: 'HTTP/' + req.httpVersion,
         SERVER_SOFTWARE: 'node',
-        REMOTE_ADDR: req.socket.remoteAddress,
+        REMOTE_ADDR: '26.45.221.34', // req.socket.remoteAddress,
         REMOTE_PORT: req.socket.remotePort,
         REQUEST_SCHEME: req.secure ? 'https' : 'http',
         HTTPS: req.secure ? 'on' : 'off'

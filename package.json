@@ -6,6 +6,32 @@
   "author": {
     "name": "Alex M."
   },
+  "keywords": [
+    "php",
+    "cgi",
+    "fastcgi",
+    "server",
+    "node",
+    "node.js",
+    "https"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BioFieldUA/phpcgiserver.git"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "exports": {
+    ".": [ "./index.js", "./js/utils.js", "./js/fastcgi.js" ]
+  },
+  "files": [
+    "index.js",
+    "server.js",
+    "js/*.js",
+    "*.pem",
+    "views/*.ejs",
+    "public/public_html/index.php"
+  ],
   "scripts": {
     "start": "node server"
   },
