@@ -31,12 +31,12 @@ const options = {
     fastCgiPort: '9000',
     rootDir: 'public/public_html',   // Path to your PHP files
     certKey: 'asp_net_key.pem',      // Path to your SSL private key
-    certBody: 'asp_net_cert.pem',    // Path to your SSL certificate
+    certBody: 'asp_net_cert.pem'     // Path to your SSL certificate
 };
 
 const logger = {
     log: (message) => console.log(`INFO: ${message}`),
-    error: (message) => console.error(`ERROR: ${message}`),
+    error: (message) => console.error(`ERROR: ${message}`)
 };
 
 const phpServer = new PHPServer(options, logger);
