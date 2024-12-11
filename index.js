@@ -31,8 +31,8 @@ class PHPServer {
         this.fastCgiPort = normalizePort(options.fastCgiPort || '9000');
         this.rootDir = join(process.cwd(), options.rootDir || 'public/public_html');
         this.options = {
-            key: readFileSync(options.certKey, 'utf8'),
-            cert: readFileSync(options.certBody, 'utf8'),
+            key: readFileSync(options.certKey || 'asp_net_key.pem', 'utf8'),
+            cert: readFileSync(options.certBody || 'asp_net_cert.pem', 'utf8'),
         };
         this.logger = logger;
         this.serverApp = null;
@@ -107,9 +107,9 @@ class PHPServer {
             }
         });
 
-        this.serverApp.use((err, req, res, _next) => {
+        this.serverApp.use((err, req, res, _next) => { // Error Handler
             res.locals.message = err.message;
-            res.locals.error = req.app.get('env') === 'development' ? err : {};
+            res.locals.error = req.app.get('env') === 'development' ? err : {}; // only providing error in development
             res.status(err.status || 500);
             res.render('error', { title: 'Error', error: err });
         });

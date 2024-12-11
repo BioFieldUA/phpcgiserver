@@ -1,11 +1,4 @@
-'use strict';
-
 import PHPServer from 'phpcgiserver';
-
-const logger = {
-    log: (message) => console.log(`INFO: ${message}`),
-    error: (message) => console.error(`ERROR: ${message}`),
-};
 
 const options = {
     isSingleIndexApp: true,
@@ -14,6 +7,11 @@ const options = {
     rootDir: 'public/public_html',
     certKey: 'asp_net_key.pem',
     certBody: 'asp_net_cert.pem',
+};
+
+const logger = {
+    log: (message) => console.log(`INFO: ${message}`),
+    error: (message) => console.error(`ERROR: ${message}`),
 };
 
 const phpServer = new PHPServer(options, logger);
