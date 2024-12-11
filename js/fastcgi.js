@@ -92,7 +92,7 @@ export function requestFastCGI(fileName, rootDir, req, res, next) {
         SERVER_ADDR: req.socket.localAddress,
         SERVER_PROTOCOL: 'HTTP/' + req.httpVersion,
         SERVER_SOFTWARE: 'node',
-        REMOTE_ADDR: '26.45.221.34', // req.socket.remoteAddress,
+        REMOTE_ADDR: req.socket.remoteAddress,
         REMOTE_PORT: req.socket.remotePort,
         REQUEST_SCHEME: req.secure ? 'https' : 'http',
         HTTPS: req.secure ? 'on' : 'off'

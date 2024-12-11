@@ -12,9 +12,9 @@ class PHPServer {
      * @property {boolean} isSingleIndexApp - Set it to TRUE if you want to redirect all of requests to index.php at the root directory.
      * @property {number} serverPort - The port number for the HTTPS Server.
      * @property {number} fastCgiPort - The port number for the FastCGI Server.
-     * @property {string} rootDir - The root directory for serving files.
-     * @property {string} certKey - Path to the SSL key file.
-     * @property {string} certBody - Path to the SSL certificate file.
+     * @property {string} rootDir - A relative Path to the root directory for serving files.
+     * @property {string} certKey - A relative Path to the SSL key file.
+     * @property {string} certBody - A relative Path to the SSL certificate file.
      */
     /**
      * @typedef {Object} Logger
