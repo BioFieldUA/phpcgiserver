@@ -7,3 +7,4 @@ nuget.config
 phpcgiserver.sln
 phpcgiserver.esproj
 phpcgiserver.esproj.user
+/package-lock.json
