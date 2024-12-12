@@ -65,7 +65,7 @@ npm startphp
 ## API Documentation
 `PHPServer` Class
 
-`constructor(options, logger?)` Creates a new instance of the PHPServer.
+`constructor(options?, logger?)` Creates a new instance of the PHPServer.
 
 * `options` (Object): An object containing the server configuration options. Defaults to empty object (`{}`) if not provided.
     * `isSingleIndexApp` (boolean): Indicates if the application is a single index application (default: false). Set it to TRUE if you want to redirect all of requests to `index.php` at the root directory.
