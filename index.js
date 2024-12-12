@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 import { readFileSync, existsSync } from 'fs';
 import { normalizePort } from './js/utils.js';
 
-class PHPServer {
+export class PHPServer {
 
     /**
      * @typedef {Object} ServerOptions
@@ -38,8 +38,8 @@ class PHPServer {
             cert: options.certBody
         };
         this.logger = logger;
-        this.serverApp = null;
         this.serverCgi = null;
+        this.serverApp = null;
         this.server = null;
     }
 
@@ -55,16 +55,16 @@ class PHPServer {
             this.serverCgi = await initFastCGI(this.fastCgiPort, this.logger);
             this.setupServer();
             this.server = createServer(this.options, this.serverApp);
-            this.server.on('error', this.onError);
-            this.server.listen(this.serverPort, () => {
-                this.logger.log(`Run Https Server on port ${this.serverPort}`);
-            });
+            this.server.on('error', (e) => this.onError(e));
             process.on('SIGHUP', () => {
                 this.logger.log('Shutting down all of Servers...');
                 this.serverCgi.kill();
                 this.server.close(() => {
                     this.logger.log('Https Server closed!');
                 });
+            });
+            this.server.listen(this.serverPort, () => {
+                this.logger.log(`Run Https Server on port ${this.serverPort}`);
             });
         } catch (e) {
             this.logger.error(`PHP FastCGI Server failed: ${e.message}`);
@@ -126,21 +126,19 @@ class PHPServer {
      */
     onError(error) {
         if (error.syscall !== 'listen') {
-            this.logger.error(`Https Server failed: ${error.message}`);
-            throw error;
+            this.logger.error(`Https Server Error: ${error.message}`);
+            return;
         }
         switch (error.code) {
             case 'EACCES':
                 this.logger.error('Https Server Port requires elevated privileges');
-                process.exit(1);
                 break;
             case 'EADDRINUSE':
-                this.logger.error('Https Server Port is already in use');
-                process.exit(1);
+                this.logger.error(`Https Server Port:${this.serverPort} is already in use`);
                 break;
             default:
                 this.logger.error(`Https Server failed! Error code: ${error.code}. Message: ${error.message}`);
-                throw error;
+                break;
         }
     }
 

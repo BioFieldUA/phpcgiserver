@@ -1,7 +1,7 @@
-import PHPServer from 'phpcgiserver';
+import { PHPServer } from 'phpcgiserver';
 
 const options = {
-    isSingleIndexApp: false
+    isSingleIndexApp: true
 };
 
 const logger = {
@@ -11,5 +11,6 @@ const logger = {
 
 const phpServer = new PHPServer(options, logger);
 phpServer.start().catch(e => {
+    // Keep the node process alive to prevent immediate exit on error:
     setInterval(() => { }, 1000);
 });

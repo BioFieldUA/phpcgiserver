@@ -85,7 +85,7 @@ interface Logger {
 ```
 
 ### Error Handling
-The PHPServer class handles common errors such as port conflicts and permission issues. If an unrecoverable error occurs, the process will exit with a non-zero code.
+The PHPServer class handles common errors such as port conflicts and permission issues.
 
 ### Signal Handling
 The server listens for the SIGHUP signal to gracefully shut down the FastCGI and HTTPS Servers.
