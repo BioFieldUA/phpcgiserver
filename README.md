@@ -30,7 +30,7 @@ npm install phpcgiserver
 Here's a basic example of how to use phpcgiserver to create and start a PHP FastCGI Server:
 
 ```js
-import PHPServer from 'phpcgiserver';
+import { PHPServer } from 'phpcgiserver';
 
 const options = {
     isSingleIndexApp: true,
