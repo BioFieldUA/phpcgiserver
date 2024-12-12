@@ -33,7 +33,7 @@
     "public/public_html/index.php"
   ],
   "scripts": {
-    "startphp": "node server"
+    "start": "node server"
   },
   "dependencies": {
     "ejs": "^3.1.10",
