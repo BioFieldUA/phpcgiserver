@@ -34,8 +34,8 @@ import PHPServer from 'phpcgiserver';
 
 const options = {
     isSingleIndexApp: true,
-    serverPort: '443',
-    fastCgiPort: '9000',
+    serverPort: 443,
+    fastCgiPort: 9000,
     rootDir: 'public/public_html',   // Path to your PHP files
     certKey: 'asp_net_key.pem',      // Path to your SSL private key
     certBody: 'asp_net_cert.pem'     // Path to your SSL certificate
@@ -68,7 +68,7 @@ npm startphp
 `constructor(options, logger?)` Creates a new instance of the PHPServer.
 
 * `options` (Object): An object containing the server configuration options. Defaults to empty object (`{}`) if not provided.
-    * `isSingleIndexApp` (boolean): Indicates if the application is a single index application (default: true). Set it to TRUE if you want to redirect all of requests to `index.php` at the root directory.
+    * `isSingleIndexApp` (boolean): Indicates if the application is a single index application (default: false). Set it to TRUE if you want to redirect all of requests to `index.php` at the root directory.
     * `serverPort` (number|string): The port number for the HTTPS Server (default: 443).
     * `fastCgiPort` (number|string): The port number for the PHP FastCGI Server (default: 9000).
     * `rootDir` (string): The root directory where your PHP files are located.

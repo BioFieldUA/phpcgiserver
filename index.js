@@ -7,32 +7,57 @@ import { fileURLToPath } from 'url';
 import { readFileSync, existsSync } from 'fs';
 import { normalizePort } from './js/utils.js';
 
+/**
+ * @typedef {Object} ServerOptions
+ * @property {boolean} isSingleIndexApp - Set it to TRUE if you want to redirect all of requests to index.php at the root directory.
+ * @property {number} serverPort - The port number for the HTTPS Server.
+ * @property {number} fastCgiPort - The port number for the PHP FastCGI Server.
+ * @property {string} rootDir - A relative Path to the root directory for serving files.
+ * @property {string} certKey - A relative Path to the SSL key file.
+ * @property {string} certBody - A relative Path to the SSL certificate file.
+ */
+
+/**
+ * @type {ServerOptions}
+ */
+export const DefaultServerOptions = {
+    isSingleIndexApp: false,
+    serverPort: 443,
+    fastCgiPort: 9000,
+    rootDir: 'public/public_html',
+    certKey: 'asp_net_key.pem',
+    certBody: 'asp_net_cert.pem'
+};
+
+/**
+ * @typedef {Object} Logger
+ * @property {function(string): void} log - Logs an informational message.
+ * @property {function(string): void} error - Logs an error message.
+ */
+
+/**
+ * @type {Logger}
+ */
+export const DefaultLogger = {
+    log: (message) => console.log(`INFO: ${message}`),
+    error: (message) => console.error(`ERROR: ${message}`)
+};
+
+/**
+ * Class representing a PHP FastCGI Server.
+ */
 export class PHPServer {
 
     /**
-     * @typedef {Object} ServerOptions
-     * @property {boolean} isSingleIndexApp - Set it to TRUE if you want to redirect all of requests to index.php at the root directory.
-     * @property {number} serverPort - The port number for the HTTPS Server.
-     * @property {number} fastCgiPort - The port number for the FastCGI Server.
-     * @property {string} rootDir - A relative Path to the root directory for serving files.
-     * @property {string} certKey - A relative Path to the SSL key file.
-     * @property {string} certBody - A relative Path to the SSL certificate file.
-     */
-    /**
-     * @typedef {Object} Logger
-     * @property {function(string): void} log - Logs an informational message.
-     * @property {function(string): void} error - Logs an error message.
-     */
-    /**
-     * @param {ServerOptions} options - The server configuration options.
-     * @param {Logger} logger - The logger to use for logging messages.
+     * @param {ServerOptions} [options={}] - The server configuration options.
+     * @param {Logger} [logger=console] - The logger to use for logging messages.
      */
     constructor(options = {}, logger = console) {
         this.__dirname = dirname(fileURLToPath(import.meta.url));
-        this.isSingleIndexApp = typeof options.isSingleIndexApp === 'undefined' ? true : options.isSingleIndexApp;
-        this.serverPort = normalizePort(options.serverPort || '443');
-        this.fastCgiPort = normalizePort(options.fastCgiPort || '9000');
-        this.rootDir = options.rootDir ? join(process.cwd(), options.rootDir) : join(this.__dirname, 'public/public_html');
+        this.isSingleIndexApp = typeof options.isSingleIndexApp === 'undefined' ? DefaultServerOptions.isSingleIndexApp : options.isSingleIndexApp;
+        this.serverPort = normalizePort(options.serverPort || DefaultServerOptions.serverPort);
+        this.fastCgiPort = normalizePort(options.fastCgiPort || DefaultServerOptions.fastCgiPort);
+        this.rootDir = options.rootDir ? join(process.cwd(), options.rootDir) : join(this.__dirname, DefaultServerOptions.rootDir);
         this.options = {
             key: options.certKey,
             cert: options.certBody
@@ -50,8 +75,8 @@ export class PHPServer {
      */
     async start() {
         try {
-            this.options.key = readFileSync(this.options.key || join(this.__dirname, 'asp_net_key.pem'), 'utf8');
-            this.options.cert = readFileSync(this.options.cert || join(this.__dirname, 'asp_net_cert.pem'), 'utf8');
+            this.options.key = readFileSync(this.options.key || join(this.__dirname, DefaultServerOptions.certKey), 'utf8');
+            this.options.cert = readFileSync(this.options.cert || join(this.__dirname, DefaultServerOptions.certBody), 'utf8');
             this.serverCgi = await initFastCGI(this.fastCgiPort, this.logger);
             this.setupServer();
             this.server = createServer(this.options, this.serverApp);
