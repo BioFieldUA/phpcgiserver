@@ -13,6 +13,13 @@
 *   **Configurable Options:** Offers a range of options to customize server behavior, including port settings, root directory, and SSL certificate paths.
 *   **Single Index Application Support**:  Provides an option to specify if the application is a single index application (e.g., using `index.php` as the entry point).
 *   **Efficient FastCGI Handling:**  Efficiently handles communication with the PHP FastCGI process.
+*   **Tested on Windows 11:** The module has been tested and confirmed to work on Windows 11.
+
+## Requirements
+
+*   **Node.js:** Ensure you have Node.js installed on your system.
+*   **PHP:** A working PHP installation is required.
+    *   **Windows:**  Make sure PHP is properly installed and configured on your Windows system. Add the PHP installation directory to your system's `PATH` environment variable. You can verify your PHP installation by opening a command prompt and running `php -v`. This should display the PHP version information.
 
 ## Installation
 ```bash
@@ -20,7 +27,7 @@ npm install phpcgiserver
 ```
 
 ## Usage
-Here's a basic example of how to use phpcgiserver to create and start a PHP FastCGI server:
+Here's a basic example of how to use phpcgiserver to create and start a PHP FastCGI Server:
 
 ```js
 import PHPServer from 'phpcgiserver';
@@ -47,6 +54,13 @@ phpServer.start().catch(e => {
 });
 ```
 You can easily replace the default logger with your own implementation. This allows you to integrate with your preferred logging system.
+
+**Quick Start:**
+
+You can quickly start the PHP FastCGI Server using the predefined `startphp` script:
+```bash
+npm startphp
+```
 
 ## API Documentation
 `PHPServer` Class
