@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/phpcgiserver.svg)](https://badge.fury.io/js/phpcgiserver)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-`phpcgiserver` is a lightweight and efficient Node.js module that allows you to run a PHP FastCGI server. It leverages the power of Node.js for handling HTTPS connections and routing, while seamlessly integrating with a PHP FastCGI backend to process PHP scripts.
+`phpcgiserver` is a lightweight and efficient Node.js module that allows you to run a PHP FastCGI Server. It leverages the power of Node.js for handling HTTPS connections and routing, while seamlessly integrating with a PHP FastCGI backend to process PHP scripts.
 
 ## Features
 
@@ -53,10 +53,10 @@ You can easily replace the default logger with your own implementation. This all
 
 `constructor(options, logger?)` Creates a new instance of the PHPServer.
 
-* `options` (Object): An object containing the server configuration options.
+* `options` (Object): An object containing the server configuration options. Defaults to empty object (`{}`) if not provided.
     * `isSingleIndexApp` (boolean): Indicates if the application is a single index application (default: true). Set it to TRUE if you want to redirect all of requests to `index.php` at the root directory.
-    * `serverPort` (number|string): The port number for the HTTPS server (default: 443).
-    * `fastCgiPort` (number|string): The port number for the PHP FastCGI server (default: 9000).
+    * `serverPort` (number|string): The port number for the HTTPS Server (default: 443).
+    * `fastCgiPort` (number|string): The port number for the PHP FastCGI Server (default: 9000).
     * `rootDir` (string): The root directory where your PHP files are located.
     * `certKey` (string): The path to your SSL private key file.
     * `certBody` (string): The path to your SSL certificate file.

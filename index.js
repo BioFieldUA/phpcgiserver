@@ -2,11 +2,13 @@ import process from 'node:process';
 import express from 'express';
 import { initFastCGI, requestFastCGI } from './js/fastcgi.js';
 import { createServer } from 'https';
-import { join, extname } from 'path';
+import { join, extname, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { readFileSync, existsSync } from 'fs';
 import { normalizePort } from './js/utils.js';
 
 class PHPServer {
+
     /**
      * @typedef {Object} ServerOptions
      * @property {boolean} isSingleIndexApp - Set it to TRUE if you want to redirect all of requests to index.php at the root directory.
@@ -25,14 +27,15 @@ class PHPServer {
      * @param {ServerOptions} options - The server configuration options.
      * @param {Logger} logger - The logger to use for logging messages.
      */
-    constructor(options, logger = console) {
-        this.isSingleIndexApp = options.isSingleIndexApp || true;
+    constructor(options = {}, logger = console) {
+        this.__dirname = dirname(fileURLToPath(import.meta.url));
+        this.isSingleIndexApp = typeof options.isSingleIndexApp === 'undefined' ? true : options.isSingleIndexApp;
         this.serverPort = normalizePort(options.serverPort || '443');
         this.fastCgiPort = normalizePort(options.fastCgiPort || '9000');
-        this.rootDir = join(process.cwd(), options.rootDir || 'public/public_html');
+        this.rootDir = options.rootDir ? join(process.cwd(), options.rootDir) : join(this.__dirname, 'public/public_html');
         this.options = {
-            key: readFileSync(options.certKey || 'asp_net_key.pem', 'utf8'),
-            cert: readFileSync(options.certBody || 'asp_net_cert.pem', 'utf8'),
+            key: options.certKey,
+            cert: options.certBody
         };
         this.logger = logger;
         this.serverApp = null;
@@ -47,6 +50,8 @@ class PHPServer {
      */
     async start() {
         try {
+            this.options.key = readFileSync(this.options.key || join(this.__dirname, 'asp_net_key.pem'), 'utf8');
+            this.options.cert = readFileSync(this.options.cert || join(this.__dirname, 'asp_net_cert.pem'), 'utf8');
             this.serverCgi = await initFastCGI(this.fastCgiPort, this.logger);
             this.setupServer();
             this.server = createServer(this.options, this.serverApp);
@@ -62,7 +67,7 @@ class PHPServer {
                 });
             });
         } catch (e) {
-            this.logger.error('PHP FastCGI Server failed:', e);
+            this.logger.error(`PHP FastCGI Server failed: ${e.message}`);
             throw e;
         }
     }
@@ -73,7 +78,7 @@ class PHPServer {
     setupServer() {
         this.serverApp = express();
         this.serverApp.set('port', this.serverPort);
-        this.serverApp.set('views', join(process.cwd(), 'views'));
+        this.serverApp.set('views', join(this.__dirname, 'views'));
         this.serverApp.set('view engine', 'ejs');
 
         this.serverApp.use((req, res, next) => {
@@ -82,13 +87,13 @@ class PHPServer {
             let exist = false;
             let filePath;
             if (ext === '') {
-                fileName = this.isSingleIndexApp ? '/index.php' : fileName.replace(/\/$/, '') + '/index.php';
+                fileName = this.isSingleIndexApp ? '/index.html' : fileName.replace(/\/$/, '') + '/index.html';
                 if (existsSync(join(this.rootDir, fileName))) {
                     exist = true;
-                    ext = '.php';
                 } else {
-                    fileName = this.isSingleIndexApp ? '/index.html' : req.path.replace(/\/$/, '') + '/index.html';
+                    fileName = this.isSingleIndexApp ? '/index.php' : req.path.replace(/\/$/, '') + '/index.php';
                     exist = existsSync(join(this.rootDir, fileName));
+                    exist && (ext = '.php');
                 }
             } else {
                 filePath = join(this.rootDir, fileName);
@@ -121,6 +126,7 @@ class PHPServer {
      */
     onError(error) {
         if (error.syscall !== 'listen') {
+            this.logger.error(`Https Server failed: ${error.message}`);
             throw error;
         }
         switch (error.code) {
@@ -133,6 +139,7 @@ class PHPServer {
                 process.exit(1);
                 break;
             default:
+                this.logger.error(`Https Server failed! Error code: ${error.code}. Message: ${error.message}`);
                 throw error;
         }
     }
