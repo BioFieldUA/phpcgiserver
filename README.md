@@ -57,9 +57,9 @@ You can easily replace the default logger with your own implementation. This all
 
 **Quick Start:**
 
-You can quickly start the PHP FastCGI Server using the predefined `start` script:
+You can quickly start the PHP FastCGI Server using the predefined `startphp` script:
 ```bash
-npm start
+npm run startphp
 ```
 
 ## API Documentation
